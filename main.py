@@ -190,7 +190,7 @@ customer_ids = [doc["_id"] for doc in result_customers]
 total_spendings = [doc["total_spending"] for doc in result_customers]
 
 plt.figure(figsize=(10, 6))
-plt.bar(customer_ids, total_spendings, color="lightgreen")
+plt.bar(customer_ids, total_spendings, color="black")
 plt.title("Top Customers by Spending")
 plt.xlabel("Customer ID")
 plt.ylabel("Total Spending")
@@ -203,7 +203,7 @@ avg_customer_ids = [doc["CustomerID"] for doc in result_avg_order]
 avg_order_values = [doc["average_order_value"] for doc in result_avg_order]
 
 plt.figure(figsize=(10, 6))
-plt.bar(avg_customer_ids, avg_order_values, color="salmon")
+plt.bar(avg_customer_ids, avg_order_values, color="red")
 plt.title("Top Customers by Average Order Value")
 plt.xlabel("Customer ID")
 plt.ylabel("Average Order Value")
