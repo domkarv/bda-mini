@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import matplotlib.pyplot as plt
 
 # Connect to MongoDB
 client = MongoClient("mongodb://localhost:27017/")  # Replace with your MongoDB URI
@@ -25,7 +26,7 @@ pipeline_products = [
 ]
 
 # Execute the aggregation
-result_products = collection.aggregate(pipeline_products)
+result_products = list(collection.aggregate(pipeline_products))
 
 # Display results
 print("Top Selling Products by Quantity:")
@@ -55,7 +56,7 @@ pipeline_customers = [
 ]
 
 # Execute the aggregation
-result_customers = collection.aggregate(pipeline_customers)
+result_customers = list(collection.aggregate(pipeline_customers))
 
 # Display results
 print("\nTop Customers by Spending:")
@@ -101,7 +102,7 @@ pipeline_avg_order = [
 ]
 
 # Execute the aggregation
-result_avg_order = collection.aggregate(pipeline_avg_order)
+result_avg_order = list(collection.aggregate(pipeline_avg_order))
 
 # Display results
 print("\nTop Customers by Average Order Value:")
@@ -131,7 +132,7 @@ pipeline_countries = [
 ]
 
 # Execute the aggregation
-result_countries = collection.aggregate(pipeline_countries)
+result_countries = list(collection.aggregate(pipeline_countries))
 
 # Display results
 print("\nTop Countries by Number of Orders:")
@@ -161,9 +162,77 @@ pipeline_hours = [
 ]
 
 # Execute the aggregation
-result_hours = collection.aggregate(pipeline_hours)
+result_hours = list(collection.aggregate(pipeline_hours))
 
 # Display results
 print("\nTop Hours by Number of Orders:")
 for doc in result_hours:
     print(f"Hour: {doc['_id']}, Number of Orders: {doc['order_count']}")
+
+# ### #
+# Plotting the results
+
+# Top Selling Products by Quantity
+product_names = [doc["_id"] for doc in result_products]
+total_quantities = [doc["total_quantity"] for doc in result_products]
+
+plt.figure(figsize=(10, 6))
+plt.bar(product_names, total_quantities, color="skyblue")
+plt.title("Top Selling Products by Quantity")
+plt.xlabel("Product (Stock Code)")
+plt.ylabel("Total Quantity Sold")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Top Customers by Spending
+customer_ids = [doc["_id"] for doc in result_customers]
+total_spendings = [doc["total_spending"] for doc in result_customers]
+
+plt.figure(figsize=(10, 6))
+plt.bar(customer_ids, total_spendings, color="lightgreen")
+plt.title("Top Customers by Spending")
+plt.xlabel("Customer ID")
+plt.ylabel("Total Spending")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Top Customers by Average Order Value
+avg_customer_ids = [doc["CustomerID"] for doc in result_avg_order]
+avg_order_values = [doc["average_order_value"] for doc in result_avg_order]
+
+plt.figure(figsize=(10, 6))
+plt.bar(avg_customer_ids, avg_order_values, color="salmon")
+plt.title("Top Customers by Average Order Value")
+plt.xlabel("Customer ID")
+plt.ylabel("Average Order Value")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Top Countries by Number of Orders
+countries = [doc["_id"] for doc in result_countries]
+order_counts = [doc["order_count"] for doc in result_countries]
+
+plt.figure(figsize=(10, 6))
+plt.bar(countries, order_counts, color="gold")
+plt.title("Top Countries by Number of Orders")
+plt.xlabel("Country")
+plt.ylabel("Number of Orders")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Top Hours by Number of Orders
+hours = [doc["_id"] for doc in result_hours]
+hour_order_counts = [doc["order_count"] for doc in result_hours]
+
+plt.figure(figsize=(10, 6))
+plt.bar(hours, hour_order_counts, color="violet")
+plt.title("Top Hours by Number of Orders")
+plt.xlabel("Hour of Day")
+plt.ylabel("Number of Orders")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
